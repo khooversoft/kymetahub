@@ -1,24 +1,25 @@
-﻿using FluentAssertions;
+﻿using KymetaHub.sdk.Clients;
 using kymetahub.test.Application;
-using KymetaHub.sdk.Clients;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FluentAssertions;
+using KymetaHub.sdk.Models;
+using KymetaHub.sdk.Services;
 
 namespace kymetahub.test;
 
-public class KymetaHubApiTests
+public class PingControllerTests
 {
-    private const int _workOrderId = 1551;
-
     [Fact]
-    public async Task GivenWipDispositionOut_ShouldPass()
+    public async Task GivenPing_ShouldPass()
     {
         KymetaHubApiClient client = TestApplication.GetKymetaHubApiClient();
 
-        var response = await client.WipDispositionOut(_workOrderId);
+        PingResponse response = await client.Ping();
         response.Should().NotBeNull();
+        response.Status.Should().Be(ServiceStatusLevel.Running.ToString());
     }
 }

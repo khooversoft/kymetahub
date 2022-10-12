@@ -1,4 +1,5 @@
 ﻿using KymetaHub.sdk.Clients;
+using KymetaHub.sdk.Models;
 using KymetaHub.sdk.Services;
 using KymetaHub.sdk.Tools;
 using Microsoft.AspNetCore.Http;
@@ -24,9 +25,13 @@ namespace KymetaHubApi.Controllers
         {
             if (workOrderId < 0) return BadRequest("Work order invalid");
 
-            var status = await _wipDispositionOutActor.Run(workOrderId, token);
+            WipDispositionOutResponse? response = await _wipDispositionOutActor.Run(workOrderId, token);
 
-            return status ? Ok() : BadRequest();
+            return response switch
+            {
+                null => BadRequest(),
+                not null => Ok(response),
+            };
         }
     }
 }

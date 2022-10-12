@@ -1,8 +1,10 @@
-﻿using KymetaHub.sdk.Tools;
+﻿using KymetaHub.sdk.Models;
+using KymetaHub.sdk.Tools;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,9 +21,18 @@ public class KymetaHubApiClient
         _logger = logger.NotNull();
     }
 
-    public async Task WipDispositionOut(int workOrderId, CancellationToken token = default)
+    public async Task<WipDispositionOutResponse> WipDispositionOut(int workOrderId, CancellationToken token = default)
     {
         HttpResponseMessage response = await _client.PostAsync($"api/Workflow/WipDispositionOut/{workOrderId}", null);
         response.EnsureSuccessStatusCode();
+
+        string content = await response.Content.ReadAsStringAsync();
+        return Json.Default.Deserialize<WipDispositionOutResponse>(content).NotNull();
+    }
+
+    public async Task<PingResponse> Ping(CancellationToken token = default)
+    {
+        PingResponse? response = await _client.GetFromJsonAsync<PingResponse>("api/ping", token);
+        return response!;
     }
 }

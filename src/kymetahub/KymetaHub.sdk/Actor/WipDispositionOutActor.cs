@@ -21,7 +21,7 @@ public class WipDispositionOutActor
         _logger = logger.NotNull();
     }
 
-    public async Task<bool> Run(int workOrderId, CancellationToken token)
+    public async Task<WipDispositionOutResponse?> Run(int workOrderId, CancellationToken token)
     {
         try
         {
@@ -33,13 +33,21 @@ public class WipDispositionOutActor
             EplantsModel eplantsModel = await _client.GetEplantsModel(workOrderModel.Data.First().EplantID, token);
 
             BillOfMaterialsModel billOfMaterialsModel = await _client.GetBillOfMaterials(workOrderModel.Data.First().StandardID, token);
+
+            return new WipDispositionOutResponse
+            {
+                WorkOrder = workOrderModel,
+                WorkOrderPartForWorkOrder = workOrderPartForWorkOrderModel,
+                WorkOrderParts = workOrderPartsModel,
+                SalesOrderForWorkOrder = salesOrderForWorkOrderModel,
+                Eplants = eplantsModel,
+                BillOfMaterials = billOfMaterialsModel,
+            };
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Workflow for workOrderId={workOrderId} failed", workOrderId);
-            return false;
+            return null;
         }
-
-        return true;
     }
 }

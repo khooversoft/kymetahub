@@ -34,6 +34,7 @@ ApplicationOption option = builder.Configuration
 
 builder.Services.AddSingleton(option);
 builder.Services.ConfigureKymeta();
+builder.Services.AddApplicationInsightsTelemetry(builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
 
 //builder.Services.AddCors(x => x.AddPolicy("default", builder =>
 //{

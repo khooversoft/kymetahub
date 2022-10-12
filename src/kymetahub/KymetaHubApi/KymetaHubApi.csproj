@@ -5,9 +5,11 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<UserSecretsId>KymetaHubApi</UserSecretsId>
+		<ApplicationInsightsResourceId>/subscriptions/0cfb5429-a9f2-465b-aeb3-337d96f6ee7a/resourceGroups/rg-mesintegration-compute-dev/providers/microsoft.insights/components/KymetaHub</ApplicationInsightsResourceId>
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.15.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
 	</ItemGroup>
 
