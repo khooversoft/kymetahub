@@ -3,13 +3,14 @@ using kymetahub.test.Application;
 using KymetaHub.sdk.Clients;
 using KymetaHub.sdk.Extensions;
 using KymetaHub.sdk.Models;
+using KymetaHub.sdk.Models.Delmia;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace kymetahub.test;
+namespace kymetahub.test.APIs;
 
 public class ClientTests
 {

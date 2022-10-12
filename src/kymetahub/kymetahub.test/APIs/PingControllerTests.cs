@@ -6,10 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
-using KymetaHub.sdk.Models;
 using KymetaHub.sdk.Services;
+using KymetaHub.sdk.Models.Ping;
 
-namespace kymetahub.test;
+namespace kymetahub.test.APIs;
 
 public class PingControllerTests
 {

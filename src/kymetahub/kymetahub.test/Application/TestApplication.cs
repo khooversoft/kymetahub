@@ -12,6 +12,7 @@ internal static class TestApplication
     private static WebApplicationFactory<Program> _host = null!;
     private static KmtaClient? _client;
     private static KymetaHubApiClient? _apiClient;
+    private static OracleClient? _oracleClient;
     private static object _lock = new object();
 
     public static void StartHost()
@@ -60,6 +61,17 @@ internal static class TestApplication
 
             HttpClient client = _host.CreateClient();
             return _apiClient = new KymetaHubApiClient(client, _host.Services.GetRequiredService<ILoggerFactory>().CreateLogger<KymetaHubApiClient>());
+        }
+    }
+
+    public static OracleClient GetOracleClient()
+    {
+        lock (_lock)
+        {
+            if (_oracleClient != null) return _oracleClient;
+
+            StartHost();
+            return _oracleClient = _host.Services.GetRequiredService<OracleClient>();
         }
     }
 

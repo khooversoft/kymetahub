@@ -1,8 +1,10 @@
 ﻿using KymetaHub.sdk.Application;
 using KymetaHub.sdk.Clients;
+using KymetaHub.sdk.Extensions;
 using KymetaHub.sdk.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Linq;
@@ -35,6 +37,19 @@ public static class Startup
             httpClient.BaseAddress = new Uri(option.KmtaUrl);
             httpClient.DefaultRequestHeaders.Add("AuthToken", authToken);
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        });
+
+        service.AddHttpClient<OracleClient>((service, httpClient) =>
+        {
+            var option = service.GetRequiredService<ApplicationOption>();
+
+            httpClient.BaseAddress = new Uri(option.OracleUrl);
+
+            string basicAuth = $"{option.OracleLogin.UserName}:{option.OracleLogin.Password}"
+                .ToBytes()
+                .Func(x => Convert.ToBase64String(x));
+
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", basicAuth);
         });
 
         return service;

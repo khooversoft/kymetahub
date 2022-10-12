@@ -1,4 +1,4 @@
-﻿using KymetaHub.sdk.Models;
+﻿using KymetaHub.sdk.Models.Ping;
 using KymetaHub.sdk.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;

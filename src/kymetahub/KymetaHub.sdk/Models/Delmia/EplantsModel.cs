@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KymetaHub.sdk.Models;
+namespace KymetaHub.sdk.Models.Delmia;
 
 public record EplantsModel
 {
@@ -15,8 +15,8 @@ public record EplantsModel
 public record EplantsData
 {
     public int ID { get; set; }
-    public string? PlantName { get; set; }
-    public string? CompanyName { get; set; }
+    public string PlantName { get; set; } = null!;
+    public string CompanyName { get; set; } = null!;
 }
 
 public static class EplantsModelExtensions

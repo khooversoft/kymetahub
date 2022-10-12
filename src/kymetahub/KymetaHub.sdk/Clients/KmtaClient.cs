@@ -1,5 +1,6 @@
 ﻿using KymetaHub.sdk.Extensions;
 using KymetaHub.sdk.Models;
+using KymetaHub.sdk.Models.Delmia;
 using KymetaHub.sdk.Tools;
 using Microsoft.Extensions.Logging;
 using System;

@@ -1,4 +1,4 @@
-﻿namespace KymetaHub.sdk.Models;
+﻿namespace KymetaHub.sdk.Models.Delmia;
 
 public record WipDispositionOutResponse
 {

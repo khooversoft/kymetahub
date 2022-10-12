@@ -5,10 +5,12 @@ namespace KymetaHub.sdk.Application;
 public record ApplicationOption
 {
     public string KmtaUrl { get; init; } = null!;
-    public KmtaLoginOption KmtaLogin { get; init; } = null!;
+    public string OracleUrl { get; init; } = null!;
+    public LoginOption KmtaLogin { get; init; } = null!;
+    public LoginOption OracleLogin { get; init; } = null!;
 }
 
-public record KmtaLoginOption
+public record LoginOption
 {
     public string UserName { get; init; } = null!;
     public string Password { get; init; } = null!;
@@ -22,11 +24,12 @@ public static class ApplicationOptionExtensions
         option.NotNull();
         option.KmtaUrl.NotEmpty();
         option.KmtaLogin.Verify();
+        option.OracleLogin.Verify();
 
         return option;
     }
 
-    public static void Verify(this KmtaLoginOption option)
+    public static void Verify(this LoginOption option)
     {
         option.NotNull();
         option.UserName.NotEmpty();

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KymetaHub.sdk.Models;
+namespace KymetaHub.sdk.Models.Delmia;
 
 public record WorkOrderPartForWorkOrderModel
 {
@@ -14,11 +14,11 @@ public record WorkOrderPartForWorkOrderModel
 
 public record WorkOrderPartsForWorkOrderData
 {
-    public string? ItemNo { get; init; } = null!;
+    public string ItemNo { get; init; } = null!;
     public int Id { get; init; }
     public int Quantity { get; init; }
-    public string? Rev { get; init; }
-    public string? Unit { get; init; }
+    public string Rev { get; init; } = null!;
+    public string Unit { get; init; } = null!;
 }
 
 public static class WorkOrderPartForWorkOrderModelExtensions

@@ -1,4 +1,6 @@
-﻿using KymetaHub.sdk.Models;
+﻿using KymetaHub.sdk.Extensions;
+using KymetaHub.sdk.Models.Delmia;
+using KymetaHub.sdk.Models.Ping;
 using KymetaHub.sdk.Tools;
 using Microsoft.Extensions.Logging;
 using System;
@@ -23,6 +25,9 @@ public class KymetaHubApiClient
 
     public async Task<WipDispositionOutResponse> WipDispositionOut(int workOrderId, CancellationToken token = default)
     {
+        _logger.LogEntryExit();
+        _logger.LogInformation("WipDispositionOut for workOrderId={workOrderId}", workOrderId);
+
         HttpResponseMessage response = await _client.PostAsync($"api/Workflow/WipDispositionOut/{workOrderId}", null);
         response.EnsureSuccessStatusCode();
 
@@ -32,7 +37,6 @@ public class KymetaHubApiClient
 
     public async Task<PingResponse> Ping(CancellationToken token = default)
     {
-        PingResponse? response = await _client.GetFromJsonAsync<PingResponse>("api/ping", token);
-        return response!;
+        return (await _client.GetFromJsonAsync<PingResponse>("api/ping", token)).NotNull();
     }
 }

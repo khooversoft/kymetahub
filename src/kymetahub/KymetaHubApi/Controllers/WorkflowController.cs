@@ -1,5 +1,5 @@
 ﻿using KymetaHub.sdk.Clients;
-using KymetaHub.sdk.Models;
+using KymetaHub.sdk.Models.Delmia;
 using KymetaHub.sdk.Services;
 using KymetaHub.sdk.Tools;
 using Microsoft.AspNetCore.Http;

@@ -26,6 +26,7 @@ public class KmtaLoginClient
         userName.NotEmpty();
         password.NotEmpty();
         _logger.LogEntryExit();
+        _logger.LogInformation("Login for user={user}", userName);
 
         var body = new
         {
@@ -37,7 +38,8 @@ public class KmtaLoginClient
         response.EnsureSuccessStatusCode();
 
         var content = await response.Content.ReadAsStringAsync();
-        var data = Json.Default.Deserialize<AuthData>(content).NotNull();
+        var data = content.ToObject<AuthData>().NotNull();
+
         return data.AuthToken;
     }
 

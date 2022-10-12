@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KymetaHub.sdk.Models;
+namespace KymetaHub.sdk.Models.Delmia;
 
 public record WorkOrderPartsModel
 {
