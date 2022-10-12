@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32922.545
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KymetaHubApi", "KymetaHubApi\KymetaHubApi.csproj", "{1507190B-41BC-4147-A040-FD7DDD9527BB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KymetaHub.sdk", "KymetaHub.sdk\KymetaHub.sdk.csproj", "{7E9ADA50-C2AF-439A-9A40-8E5CA783998F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kymetahub.test", "kymetahub.test\kymetahub.test.csproj", "{A43C47F5-FD48-4A1C-8909-BCCE89F082DB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1507190B-41BC-4147-A040-FD7DDD9527BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1507190B-41BC-4147-A040-FD7DDD9527BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1507190B-41BC-4147-A040-FD7DDD9527BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1507190B-41BC-4147-A040-FD7DDD9527BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E9ADA50-C2AF-439A-9A40-8E5CA783998F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E9ADA50-C2AF-439A-9A40-8E5CA783998F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E9ADA50-C2AF-439A-9A40-8E5CA783998F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E9ADA50-C2AF-439A-9A40-8E5CA783998F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A43C47F5-FD48-4A1C-8909-BCCE89F082DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A43C47F5-FD48-4A1C-8909-BCCE89F082DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A43C47F5-FD48-4A1C-8909-BCCE89F082DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A43C47F5-FD48-4A1C-8909-BCCE89F082DB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FB99B162-E82F-4F96-805A-44CC0AE3E83C}
+	EndGlobalSection
+EndGlobal
