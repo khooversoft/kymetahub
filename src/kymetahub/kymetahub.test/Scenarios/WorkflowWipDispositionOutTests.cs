@@ -11,17 +11,16 @@ namespace kymetahub.test.Scenarios;
 
 public class WorkflowWipDispositionOutTests
 {
-    private const int _workOrderId = 1551;
+    //private const int _workOrderId = 1551;
+    private const int _workOrderId = 1517;
 
     [Fact]
     public async Task GivenWorkOrder_WhenWorkFlowRun_ShouldPass()
     {
         KymetaHubApiClient client = TestApplication.GetKymetaHubApiClient();
 
-        var response = await client.WipDispositionOut(_workOrderId);
+        var creationDate = DateTime.UtcNow;
+        var response = await client.WipDispositionOut(_workOrderId, creationDate);
         response.Should().NotBeNull();
-
-
-
     }
 }

@@ -15,7 +15,7 @@ public record SalesOrderForWorkOrderModel
 public record SalesOrderForWorkOrderData
 {
     public int EPlantId { get; init; }
-    public string? OrderNumber { get; init; }
+    public string OrderNumber { get; init; } = null!;
     public int OrdDetailId { get; init; }
 }
 

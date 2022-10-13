@@ -22,25 +22,24 @@ public class OracleClient
         _logger = logger.NotNull();
     }
 
-    public async Task<bool> CreateWorkOrder(CreateWorkOrderRequest createWorkOrderRequest, CancellationToken token = default)
+    public async Task<(bool success, string? response)> CreateWorkOrder(CreateWorkOrderRequest createWorkOrderRequest, CancellationToken token = default)
     {
         createWorkOrderRequest.NotNull();
         _logger.LogEntryExit();
-        _logger.LogInformation("Posting UpdateWorkOrder for object={object}", createWorkOrderRequest.ToJson());
+        _logger.LogInformation("Posting CreateWorkOrder for object={object}", createWorkOrderRequest.ToJsonPascal());
 
-        HttpResponseMessage response = await _client.PostAsJsonAsync("workOrders", createWorkOrderRequest, token);
-        response.EnsureSuccessStatusCode();
+        string json = createWorkOrderRequest.ToJsonPascal();
+        var requestContent = new StringContent(json, Encoding.UTF8, "application/json");
 
-        return true;
-    }
+        HttpResponseMessage response = await _client.PostAsync("workOrders", requestContent, token);
+        string responseContent = await response.Content.ReadAsStringAsync();
 
-    public async Task<WorkOrderResponse> GetWorkOrder(string itemNumber, CancellationToken token = default)
-    {
-        itemNumber.NotEmpty();
-        _logger.LogEntryExit();
-        _logger.LogInformation("Posting UpdateWorkOrder for itemNumber={itemNumber}", itemNumber);
+        if (!response.IsSuccessStatusCode)
+        {
+            _logger.LogError("Failed call to Oracle, message={message}", responseContent);
+            return (false, responseContent);
+        }
 
-        WorkOrderResponse response = (await _client.GetFromJsonAsync<WorkOrderResponse>("workOrders", token)).NotNull();
-
+        return (true, responseContent);
     }
 }

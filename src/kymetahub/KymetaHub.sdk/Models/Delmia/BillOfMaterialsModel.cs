@@ -14,7 +14,7 @@ public record BillOfMaterialsModel
 
 public class BillOfMaterialsData
 {
-    public string? MfgType { get; set; }
+    public string MfgType { get; set; } = null!;
 }
 
 public static class BillOfMaterialsDataExtensions

@@ -17,7 +17,7 @@ public record WorkOrderData
 {
     public int Id { get; set; }
     public int StandardID { get; set; }
-    public string? MfgNumber { get; set; } = null!;
+    public string MfgNumber { get; set; } = null!;
     public int EplantID { get; set; }
     public DateTime StartDate { get; set; }
 }

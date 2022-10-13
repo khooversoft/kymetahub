@@ -44,6 +44,7 @@ public static class Startup
             var option = service.GetRequiredService<ApplicationOption>();
 
             httpClient.BaseAddress = new Uri(option.OracleUrl);
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             string basicAuth = $"{option.OracleLogin.UserName}:{option.OracleLogin.Password}"
                 .ToBytes()

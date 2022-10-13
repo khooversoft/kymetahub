@@ -19,6 +19,7 @@ public static class ByteExtensions
     }
 
     public static string ToJson<T>(this T subject) => Json.Default.Serialize(subject);
+    public static string ToJsonPascal<T>(this T subject) => Json.Default.SerializePascal(subject);
 
     public static T? ToObject<T>(this string json)
     {

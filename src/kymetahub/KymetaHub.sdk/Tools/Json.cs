@@ -27,9 +27,15 @@ public class Json
         Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) },
     };
 
+    public static JsonSerializerOptions PascalOptions { get; } = new JsonSerializerOptions
+    {
+        PropertyNameCaseInsensitive = true,
+    };
+
     public T? Deserialize<T>(string subject) => JsonSerializer.Deserialize<T>(subject, JsonSerializerOptions);
 
     public string Serialize<T>(T subject) => JsonSerializer.Serialize(subject, JsonSerializerOptions);
+    public string SerializePascal<T>(T subject) => JsonSerializer.Serialize(subject, PascalOptions);
 
     public string SerializeFormat<T>(T subject) => JsonSerializer.Serialize(subject, JsonSerializerFormatOption);
 }

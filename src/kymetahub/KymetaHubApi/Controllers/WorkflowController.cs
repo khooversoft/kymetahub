@@ -1,5 +1,6 @@
 ﻿using KymetaHub.sdk.Clients;
 using KymetaHub.sdk.Models.Delmia;
+using KymetaHub.sdk.Models.Orcale;
 using KymetaHub.sdk.Services;
 using KymetaHub.sdk.Tools;
 using Microsoft.AspNetCore.Http;
@@ -20,18 +21,13 @@ namespace KymetaHubApi.Controllers
             _logger = logger;
         }
 
-        [HttpPost("WipDispositionOut/{workOrderId}")]
-        public async Task<IActionResult> WipDispositionOut(int workOrderId, CancellationToken token)
+        [HttpGet("WipDispositionOut/{workOrderId}/{creationDate}")]
+        public async Task<IActionResult> WipDispositionOut(int workOrderId, DateTime creationDate, CancellationToken token)
         {
             if (workOrderId < 0) return BadRequest("Work order invalid");
 
-            WipDispositionOutResponse? response = await _wipDispositionOutActor.Run(workOrderId, token);
-
-            return response switch
-            {
-                null => BadRequest(),
-                not null => Ok(response),
-            };
+            CreateWorkOrderResponse? response = await _wipDispositionOutActor.Run(workOrderId, creationDate, token);
+            return Ok(response);
         }
     }
 }

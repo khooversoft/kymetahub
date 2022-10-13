@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -25,18 +26,22 @@ public class WipDispositionOutActor
         _logger = logger.NotNull();
     }
 
-    public async Task<WipDispositionOutResponse?> Run(int workOrderId, CancellationToken token)
+    public async Task<CreateWorkOrderResponse> Run(int workOrderId, DateTime creationDate, CancellationToken token)
     {
         _logger.LogEntryExit();
         _logger.LogInformation("Running for workOrderId={workOrderId}", workOrderId);
 
-        WipDispositionOutResponse? response = await CollectData(workOrderId, token);
-        if (response == null) return null;
+        WipDispositionOutResponse? wipResponse = await CollectData(workOrderId, token);
+        if (wipResponse == null) return new CreateWorkOrderResponse();
 
-        var success = await UpdateSync(response, token);
-        if (!success) return null;
+        (bool success, string? response) updateReponse = await UpdateSync(wipResponse, workOrderId, creationDate, token);
 
-        return response;
+        return new CreateWorkOrderResponse
+        {
+            WipResponse = wipResponse,
+            Success = updateReponse.success,
+            OrcaleResponse = updateReponse.response,
+        };
     }
 
     private async Task<WipDispositionOutResponse?> CollectData(int workOrderId, CancellationToken token)
@@ -69,20 +74,22 @@ public class WipDispositionOutActor
         }
     }
 
-    private async Task<bool> UpdateSync(WipDispositionOutResponse wip, CancellationToken token)
+    private async Task<(bool success, string? response)> UpdateSync(WipDispositionOutResponse wip, int workOrderId, DateTime creationDate, CancellationToken token)
     {
         _logger.LogEntryExit();
         _logger.LogInformation("Posting to sync: object={wip}", wip.ToJson());
 
         var request = new CreateWorkOrderRequest
         {
-            OrganizationCode = wip.Eplants.Data.First().PlantName,
+            WorkOrderNumber = workOrderId.ToString(),
             ItemNumber = wip.WorkOrderPartForWorkOrder.Data.First().ItemNo,
             PlannedStartQuantity = wip.WorkOrderPartForWorkOrder.Data.First().Quantity,
             PlannedStartDate = wip.WorkOrder.Data.First().StartDate,
+
         }.Assert(x => x.IsValid(), "Invalid work order require");
 
-        bool response = await _oracleClient.UpdateWorkOrder(request, token);
+        (bool success, string? response) response = await _oracleClient.CreateWorkOrder(request, token);
+        if (response.success) _logger.LogInformation("Posting success, response={response}", response);
         return response;
     }
 }
