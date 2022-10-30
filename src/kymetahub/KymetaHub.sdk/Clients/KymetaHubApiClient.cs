@@ -1,7 +1,8 @@
 ﻿using KymetaHub.sdk.Extensions;
 using KymetaHub.sdk.Models.Delmia;
-using KymetaHub.sdk.Models.Orcale;
 using KymetaHub.sdk.Models.Ping;
+using KymetaHub.sdk.Models.Requests;
+using KymetaHub.sdk.Models.Responses;
 using KymetaHub.sdk.Tools;
 using Microsoft.Extensions.Logging;
 using System;
@@ -24,16 +25,40 @@ public class KymetaHubApiClient
         _logger = logger.NotNull();
     }
 
-    public async Task<CreateWorkOrderResponse> WipDispositionOut(int workOrderId, DateTime creationDate, CancellationToken token = default)
+    public async Task<CreateWorkOrderResponse> CreateWorkOrder(int workOrderId, DateTime creationDate, CancellationToken token = default)
     {
         _logger.LogEntryExit();
-        _logger.LogInformation("WipDispositionOut for workOrderId={workOrderId}", workOrderId);
+        _logger.LogInformation("CreateWorkOrder for workOrderId={workOrderId}", workOrderId);
 
-        HttpResponseMessage response = await _client.GetAsync($"api/Workflow/WipDispositionOut/{workOrderId}/{creationDate.ToString("o")}");
+        HttpResponseMessage response = await _client.GetAsync($"api/Workflow/createWorkOrder/{workOrderId}/{creationDate.ToString("o")}");
         response.EnsureSuccessStatusCode();
 
         string content = await response.Content.ReadAsStringAsync();
         return Json.Default.Deserialize<CreateWorkOrderResponse>(content).NotNull();
+    }
+
+    public async Task<UpdateWorkOrderResponse> UpdateWorkOrder(UpdateWorkOrderRequest request, CancellationToken token = default)
+    {
+        _logger.LogEntryExit();
+        _logger.LogInformation("Update work order workOrderId={workOrderId}", request.WORKORDER_ID);
+
+        HttpResponseMessage response = await _client.PostAsJsonAsync("api/Workflow/updateWorkOrder", request, token);
+        response.EnsureSuccessStatusCode();
+
+        string content = await response.Content.ReadAsStringAsync();
+        return Json.Default.Deserialize<UpdateWorkOrderResponse>(content).NotNull();
+    }
+
+    public async Task<WorkOrderMaterialTrxResponse> WorkOrderMaterialTrx(WorkOrderMaterialTrxRequest request, CancellationToken token = default)
+    {
+        _logger.LogEntryExit();
+        _logger.LogInformation("WorkOrderMaterialTrx work order workOrderId={workOrderId}", request.WORKORDER_ID);
+
+        HttpResponseMessage response = await _client.PostAsJsonAsync("api/Workflow/workOrderMaterialTrx", request, token);
+        response.EnsureSuccessStatusCode();
+
+        string content = await response.Content.ReadAsStringAsync();
+        return Json.Default.Deserialize<WorkOrderMaterialTrxResponse>(content).NotNull();
     }
 
     public async Task<PingResponse> Ping(CancellationToken token = default)

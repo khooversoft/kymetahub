@@ -2,6 +2,7 @@
 using KymetaHub.sdk.Extensions;
 using KymetaHub.sdk.Models.Delmia;
 using KymetaHub.sdk.Models.Orcale;
+using KymetaHub.sdk.Models.Responses;
 using KymetaHub.sdk.Tools;
 using Microsoft.Extensions.Logging;
 using System;
@@ -13,13 +14,13 @@ using System.Threading.Tasks;
 
 namespace KymetaHub.sdk.Services;
 
-public class WipDispositionOutActor
+public class WorkOrderCreateActor
 {
     private readonly KmtaClient _client;
-    private readonly ILogger<WipDispositionOutActor> _logger;
+    private readonly ILogger<WorkOrderCreateActor> _logger;
     private readonly OracleClient _oracleClient;
 
-    public WipDispositionOutActor(KmtaClient kmtaClient, OracleClient oracleClient, ILogger<WipDispositionOutActor> logger)
+    public WorkOrderCreateActor(KmtaClient kmtaClient, OracleClient oracleClient, ILogger<WorkOrderCreateActor> logger)
     {
         _client = kmtaClient.NotNull();
         _oracleClient = oracleClient.NotNull();

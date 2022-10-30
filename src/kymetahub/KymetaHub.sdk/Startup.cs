@@ -18,7 +18,7 @@ public static class Startup
 {
     public static IServiceCollection ConfigureKymeta(this IServiceCollection service)
     {
-        service.AddSingleton<WipDispositionOutActor>();
+        service.AddSingleton<WorkOrderCreateActor>();
 
         service.AddHttpClient<KmtaLoginClient>((service, httpClient) =>
         {

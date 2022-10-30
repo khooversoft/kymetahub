@@ -1,33 +1,59 @@
 ﻿using KymetaHub.sdk.Clients;
 using KymetaHub.sdk.Models.Delmia;
-using KymetaHub.sdk.Models.Orcale;
 using KymetaHub.sdk.Services;
 using KymetaHub.sdk.Tools;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using KymetaHub.sdk.Models.Requests;
+using KymetaHub.sdk.Models.Responses;
 
-namespace KymetaHubApi.Controllers
+namespace KymetaHubApi.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class WorkflowController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class WorkflowController : ControllerBase
+    private readonly WorkOrderCreateActor _wipDispositionOutActor;
+    private readonly ILogger<WorkflowController> _logger;
+
+    public WorkflowController(WorkOrderCreateActor wipDispositionOutService, ILogger<WorkflowController> logger)
     {
-        private readonly WipDispositionOutActor _wipDispositionOutActor;
-        private readonly ILogger<WorkflowController> _logger;
+        _wipDispositionOutActor = wipDispositionOutService;
+        _logger = logger;
+    }
 
-        public WorkflowController(WipDispositionOutActor wipDispositionOutService, ILogger<WorkflowController> logger)
+    [HttpGet("createWorkOrder/{workOrderId}/{creationDate}")]
+    public async Task<IActionResult> CreateWorkOrder(int workOrderId, DateTime creationDate, CancellationToken token)
+    {
+        if (workOrderId < 0) return BadRequest("Work order invalid");
+
+        CreateWorkOrderResponse? response = await _wipDispositionOutActor.Run(workOrderId, creationDate, token);
+        return Ok(response);
+    }
+
+    [HttpPost("updateWorkOrder")]
+    public Task<IActionResult> WorkOrderUpdate([FromBody] UpdateWorkOrderRequest request)
+    {
+        UpdateWorkOrderResponse response = new UpdateWorkOrderResponse
         {
-            _wipDispositionOutActor = wipDispositionOutService;
-            _logger = logger;
-        }
+            Success = true,
+            WorkOrderId = request.WORKORDER_ID,
+            Message = "Workorder updated",
+        };
 
-        [HttpGet("WipDispositionOut/{workOrderId}/{creationDate}")]
-        public async Task<IActionResult> WipDispositionOut(int workOrderId, DateTime creationDate, CancellationToken token)
+        return Task.FromResult<IActionResult>(Ok(response));
+    }
+
+    [HttpPost("workOrderMaterialTrx")]
+    public Task<IActionResult> WorkOrderMaterialTrxResponse([FromBody] WorkOrderMaterialTrxRequest request)
+    {
+        WorkOrderMaterialTrxResponse response = new WorkOrderMaterialTrxResponse
         {
-            if (workOrderId < 0) return BadRequest("Work order invalid");
+            Success = true,
+            WorkOrderId = request.WORKORDER_ID.ToString(),
+            Message = "Material trx has been updated",
+        };
 
-            CreateWorkOrderResponse? response = await _wipDispositionOutActor.Run(workOrderId, creationDate, token);
-            return Ok(response);
-        }
+        return Task.FromResult<IActionResult>(Ok(response));
     }
 }

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KymetaHub.sdk.Models.Orcale;
+namespace KymetaHub.sdk.Models.Responses;
 
 public record CreateWorkOrderResponse
 {
