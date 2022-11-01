@@ -80,7 +80,7 @@ public class WorkOrderCreateActor
         _logger.LogEntryExit();
         _logger.LogInformation("Posting to sync: object={wip}", wip.ToJson());
 
-        var request = new CreateWorkOrderRequest
+        var request = new CreateWorkOrderModel
         {
             WorkOrderNumber = workOrderId.ToString(),
             ItemNumber = wip.WorkOrderPartForWorkOrder.Data.First().ItemNo,

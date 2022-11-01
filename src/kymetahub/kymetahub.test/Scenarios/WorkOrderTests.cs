@@ -23,9 +23,9 @@ public class WorkOrderTests
     {
         KymetaHubApiClient client = TestApplication.GetKymetaHubApiClient();
 
-        var request = new UpdateWorkOrderRequest
+        var request = new WorkOrderUpdateRequest
         {
-            WORKORDER_ID = "1540",
+            WORKORDER_ID = "1517",
             ACTUAL_COMPLETE_DATE = "",
             START_DATE = "09/21/2022 16:22:12",
             CLOSED_DATE = "",

@@ -2,6 +2,7 @@
 using KymetaHub.sdk.Extensions;
 using KymetaHub.sdk.Models.Delmia;
 using KymetaHub.sdk.Models.Orcale;
+using KymetaHub.sdk.Models.Requests;
 using KymetaHub.sdk.Models.Responses;
 using KymetaHub.sdk.Services;
 using KymetaHub.sdk.Tools;
@@ -27,21 +28,24 @@ public class WorkOrderUpdateActor
         _logger = logger.NotNull();
     }
 
-    public async Task<CreateWorkOrderResponse> Run(int workOrderId, DateTime creationDate, CancellationToken token)
+    public async Task<WorkOrderUpdateResponse> Run(WorkOrderUpdateRequest request, CancellationToken token)
     {
         _logger.LogEntryExit();
-        _logger.LogInformation("Running for workOrderId={workOrderId}", workOrderId);
+
+        int workOrderId = int.Parse(request.WORKORDER_ID);
+        _logger.LogInformation("Updating workorder for workOrderId={workOrderId} (data={data}", workOrderId, request.WORKORDER_ID);
 
         WipDispositionOutResponse? wipResponse = await CollectData(workOrderId, token);
-        if (wipResponse == null) return new CreateWorkOrderResponse();
+        if (wipResponse == null) return new WorkOrderUpdateResponse();
 
-        (bool success, string? response) updateReponse = await UpdateSync(wipResponse, workOrderId, creationDate, token);
+        (bool success, string? response) updateReponse = await UpdateSync(wipResponse, workOrderId, token);
 
-        return new CreateWorkOrderResponse
+        return new WorkOrderUpdateResponse
         {
-            WipResponse = wipResponse,
             Success = updateReponse.success,
-            OrcaleResponse = updateReponse.response,
+            WorkOrderId = request.WORKORDER_ID,
+            Message = updateReponse.response,
+            Wip = wipResponse,
         };
     }
 
@@ -50,7 +54,6 @@ public class WorkOrderUpdateActor
         try
         {
             WorkOrderModel workOrderModel = await _client.GetWorkOrder(workOrderId, token);
-            WorkOrderPartForWorkOrderModel workOrderPartForWorkOrderModel = await _client.GetWorkOrderPartForWorkOrderModel(workOrderId, token);
             WorkOrderPartsModel workOrderPartsModel = await _client.GetWorkOrderParts(workOrderId, token);
 
             SalesOrderForWorkOrderModel salesOrderForWorkOrderModel = await _client.GetSalesOrderForWorkOrder(workOrderId, workOrderPartsModel.Data.First().PartNoId, token);
@@ -61,7 +64,6 @@ public class WorkOrderUpdateActor
             return new WipDispositionOutResponse
             {
                 WorkOrder = workOrderModel,
-                WorkOrderPartForWorkOrder = workOrderPartForWorkOrderModel,
                 WorkOrderParts = workOrderPartsModel,
                 SalesOrderForWorkOrder = salesOrderForWorkOrderModel,
                 Eplants = eplantsModel,
@@ -75,21 +77,24 @@ public class WorkOrderUpdateActor
         }
     }
 
-    private async Task<(bool success, string? response)> UpdateSync(WipDispositionOutResponse wip, int workOrderId, DateTime creationDate, CancellationToken token)
+    private async Task<(bool success, string? response)> UpdateSync(WipDispositionOutResponse wip, int workOrderId, CancellationToken token)
     {
         _logger.LogEntryExit();
         _logger.LogInformation("Posting to sync: object={wip}", wip.ToJson());
 
-        var request = new CreateWorkOrderRequest
+        var request = new WorkOrderUpdateModel
         {
             WorkOrderNumber = workOrderId.ToString(),
-            ItemNumber = wip.WorkOrderPartForWorkOrder.Data.First().ItemNo,
-            PlannedStartQuantity = wip.WorkOrderPartForWorkOrder.Data.First().Quantity,
-            PlannedStartDate = wip.WorkOrder.Data.First().StartDate,
+            SourceHeaderReference = wip.SalesOrderForWorkOrder.Data.First().OrderNumber,
+            SourceLineReferenceId = wip.SalesOrderForWorkOrder.Data.First().OrdDetailId,
+            SourceSystemId = wip.SalesOrderForWorkOrder.Data.First().EPlantId,
+            OrganizationCode = wip.Eplants.Data.First().PlantName,
+            OrganizationName = wip.Eplants.Data.First().CompanyName,
+            WorkOrderType = wip.BillOfMaterials.Data.MfgType,
 
         }.Assert(x => x.IsValid(), "Invalid work order require");
 
-        (bool success, string? response) response = await _oracleClient.CreateWorkOrder(request, token);
+        (bool success, string? response) response = await _oracleClient.UpdateWorkOrder(request, token);
         if (response.success) _logger.LogInformation("Posting success, response={response}", response);
         return response;
     }

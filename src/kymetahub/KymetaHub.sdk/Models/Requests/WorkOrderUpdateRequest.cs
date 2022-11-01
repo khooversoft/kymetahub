@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KymetaHub.sdk.Models.Requests;
 
-public class UpdateWorkOrderRequest
+public class WorkOrderUpdateRequest
 {
     public string WORKORDER_ID { get; set; } = null!;
     public string ACTUAL_COMPLETE_DATE { get; set; } = null!;

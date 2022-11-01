@@ -22,7 +22,7 @@ public class OracleClient
         _logger = logger.NotNull();
     }
 
-    public async Task<(bool success, string? response)> CreateWorkOrder(CreateWorkOrderRequest createWorkOrderRequest, CancellationToken token = default)
+    public async Task<(bool success, string? response)> CreateWorkOrder(CreateWorkOrderModel createWorkOrderRequest, CancellationToken token = default)
     {
         createWorkOrderRequest.NotNull();
         _logger.LogEntryExit();
@@ -41,5 +41,29 @@ public class OracleClient
         }
 
         return (true, responseContent);
+    }
+
+
+    public async Task<(bool success, string? response)> UpdateWorkOrder(WorkOrderUpdateModel workOrderUpdateModel, CancellationToken token = default)
+    {
+        workOrderUpdateModel.NotNull();
+        _logger.LogEntryExit();
+        _logger.LogInformation("Patching WorkOrder for object={object}", workOrderUpdateModel.ToJsonPascal());
+
+        return (true, "No errors");
+
+        //string json = workOrderUpdateModel.ToJsonPascal();
+        //var requestContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+        //HttpResponseMessage response = await _client.PatchAsync($"workOrders/{workOrderUpdateModel.WorkOrderNumber}", requestContent, token);
+        //string responseContent = await response.Content.ReadAsStringAsync();
+
+        //if (!response.IsSuccessStatusCode)
+        //{
+        //    _logger.LogError("Failed call to Oracle, message={message}", responseContent);
+        //    return (false, responseContent);
+        //}
+
+        //return (true, responseContent);
     }
 }

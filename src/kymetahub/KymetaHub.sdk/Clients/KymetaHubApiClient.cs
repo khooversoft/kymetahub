@@ -37,16 +37,16 @@ public class KymetaHubApiClient
         return Json.Default.Deserialize<CreateWorkOrderResponse>(content).NotNull();
     }
 
-    public async Task<UpdateWorkOrderResponse> UpdateWorkOrder(UpdateWorkOrderRequest request, CancellationToken token = default)
+    public async Task<WorkOrderUpdateResponse> UpdateWorkOrder(WorkOrderUpdateRequest request, CancellationToken token = default)
     {
         _logger.LogEntryExit();
         _logger.LogInformation("Update work order workOrderId={workOrderId}", request.WORKORDER_ID);
 
-        HttpResponseMessage response = await _client.PostAsJsonAsync("api/Workflow/updateWorkOrder", request, token);
+        HttpResponseMessage response = await _client.PostAsJsonAsync("api/Workflow/workOrderUpdate", request, token);
         response.EnsureSuccessStatusCode();
 
         string content = await response.Content.ReadAsStringAsync();
-        return Json.Default.Deserialize<UpdateWorkOrderResponse>(content).NotNull();
+        return Json.Default.Deserialize<WorkOrderUpdateResponse>(content).NotNull();
     }
 
     public async Task<WorkOrderMaterialTrxResponse> WorkOrderMaterialTrx(WorkOrderMaterialTrxRequest request, CancellationToken token = default)

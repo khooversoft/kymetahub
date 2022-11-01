@@ -1,4 +1,5 @@
-﻿using KymetaHub.sdk.Application;
+﻿using KymetaHub.sdk.Actor;
+using KymetaHub.sdk.Application;
 using KymetaHub.sdk.Clients;
 using KymetaHub.sdk.Extensions;
 using KymetaHub.sdk.Services;
@@ -19,6 +20,7 @@ public static class Startup
     public static IServiceCollection ConfigureKymeta(this IServiceCollection service)
     {
         service.AddSingleton<WorkOrderCreateActor>();
+        service.AddSingleton<WorkOrderUpdateActor>();
 
         service.AddHttpClient<KmtaLoginClient>((service, httpClient) =>
         {

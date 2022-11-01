@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace KymetaHub.sdk.Models.Orcale;
 
-public record CreateWorkOrderRequest
+public record CreateWorkOrderModel
 {
     public string WorkOrderNumber { get; init; } = null!;
     public string OrganizationCode { get; set; } = "MFG";   // TODO: Needs mapping
@@ -31,9 +31,9 @@ public record CreateWorkOrderRequest
 //    "ExplosionFlag": true
 //}
 
-public static class CreateWorkOrderRequestExtensions
+public static class CreateWorkOrderModelExtensions
 {
-    public static bool IsValid(this CreateWorkOrderRequest subject)
+    public static bool IsValid(this CreateWorkOrderModel subject)
     {
         return subject != null &&
             !subject.ItemNumber.IsEmpty();
